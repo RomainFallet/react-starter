@@ -74,12 +74,9 @@ npm install --save-dev cypress@~4.3.0 axios-mock-adapter@~1.18.0 @testing-librar
 Add this script in "./package.json" file:
 
 ```json
-...
   "scripts": {
-    ...
     "test:all": "react-scripts test --watchAll=false"
   },
-...
 ```
 
 ### Install Prettier code formatter
@@ -93,13 +90,10 @@ npm install --save-dev prettier@~2.0.0 eslint-plugin-prettier@~3.1.0 eslint-conf
 Add these scripts to "./package.json" file:
 
 ```json
-...
   "scripts": {
-    ...
     "lint:json": "prettier --check \"./**/*.json\"",
     "format:json": "prettier --write \"./**/*.json\"",
   },
-...
 ```
 
 ### Install ESLint code linter with StandardJS rules
@@ -122,13 +116,10 @@ Remove the "eslintConfig" key from "./package.json" file, then, create a new "./
 Add these scripts to "./package.json" file:
 
 ```json
-...
   "scripts": {
-    ...
     "lint:js": "eslint \"./**/*.js\"",
     "format:js": "eslint --fix \"./**/*.js\"",
   },
-...
 ```
 
 ### Install StyleLint code linter with Standard rules
@@ -150,15 +141,12 @@ Create a new "./.stylelintrc.json":
 Add these scripts to "./package.json" file:
 
 ```json
-...
   "scripts": {
-    ...
     "lint:css": "prettier --check \"./**/*.css\" && stylelint \"./**/*.css\"",
     "format:css": "prettier --write \"./**/*.css\"",
     "lint": "npm-run-all lint:*",
     "format": "npm-run-all format:*"
   },
-...
 ```
 
 ### Install dependencies checker
@@ -172,13 +160,10 @@ npm install --save-dev npm-check@~5.9.0
 Add these scripts to "./package.json" file:
 
 ```json
-...
   "scripts": {
-    ...
     "deps:check": "npm-check",
     "deps:upgrade": "npm-check -u"
   },
-...
 ```
 
 ### Configure .editorconfig
@@ -211,7 +196,6 @@ npm install --save-dev husky@~4.2.0 lint-staged@~10.1.0
 Add these lines juste after "browserslists" key in "./package.json" file:
 
 ```json
-...
   "lint-staged": {
     "./**/*.json": ["prettier --check"],
     "./**/*.js": ["eslint"],
@@ -222,7 +206,6 @@ Add these lines juste after "browserslists" key in "./package.json" file:
       "pre-commit": "lint-staged"
     }
   }
-...
 ```
 
 ### Configure CI with GitHub Actions
