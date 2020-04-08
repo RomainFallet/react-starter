@@ -1,6 +1,9 @@
 # React starter
 
-The purpose of this repository is to provide instructions to create and configure a new [React](https://reactjs.org/) app from scratch with appropriate linters, editor config, testing utilities, continuous integration on Ubuntu, macOS and Windows.
+The purpose of this repository is to provide instructions to create
+and configure a new [React](https://reactjs.org/) app from scratch
+with appropriate linters, editor config, testing utilities,
+continuous integration on Ubuntu, macOS and Windows.
 
 On Windows, commands are meant to be executed on PowerShell.
 
@@ -12,6 +15,8 @@ On Windows, commands are meant to be executed on PowerShell.
   - [Install Cypress & testing utilities](#install-cypress--testing-utilities)
   - [Install Prettier code formatter](#install-prettier-code-formatter)
   - [Install ESLint code linter with StandardJS rules](#install-eslint-code-linter-with-standardjs-rules)
+  - [Install StyleLint code linter with Standard rules](#install-stylelint-code-linter-with-standard-rules)
+  - [Install MarkdownLint](#install-markdownLint)
   - [Install npm-check dependencies checker](#install-dependencies-checker)
   - [Install dotenv-flow](#install-dotenv)
   - [Configure .gitignore](#configure-gitignore)
@@ -50,14 +55,11 @@ npx create-react-app react-starter --use-npm
 # Install others packages
 npm install axios@~0.19.0
 npm install --save-dev npm-run-all@~4.1.5
+```
 
-# Replace caret by tilde in package.json versions (MacOS & Ubuntu)
-sed -i'.tmp' -e 's/"^/"~/g' ./package.json && rm ./package.json.tmp
+Replace caret (^) by tilde (~) in package.json versions, then re-install deps:
 
-# Replace caret by tilde in package.json versions (Windows)
-((Get-Content -path ./package.json -Raw) -replace '"^','"~') | Set-Content -Path ./package.json
-
-# Re-install deps
+```bash
 npm install
 ```
 
@@ -68,7 +70,11 @@ npm install
 Install packages:
 
 ```bash
-npm install --save-dev cypress@~4.3.0 axios-mock-adapter@~1.18.0 @testing-library/cypress@~6.0.0 jest-axe@~3.4.0 identity-obj-proxy@~3.0.0
+# Install Cypress
+npm i -D cypress@~4.3.0 @testing-library/cypress@~6.0.0
+
+# Install other tools
+npm i -D axios-mock-adapter@~1.18.0  jest-axe@~3.4.0 identity-obj-proxy@~3.0.0
 ```
 
 Add this script in "./package.json" file:
@@ -84,7 +90,11 @@ Add this script in "./package.json" file:
 [Back to top ↑](#table-of-contents)
 
 ```bash
-npm install --save-dev prettier@~2.0.0 eslint-plugin-prettier@~3.1.0 eslint-config-prettier@~6.10.0 prettier-config-standard@~1.0.0 eslint-config-prettier-standard@~3.0.0
+# Install Prettier with StandardJS config
+npm i -D prettier@~2.0.0 prettier-config-standard@~1.0.0
+
+# Install configs for ESLint integration
+npm i -D eslint-plugin-prettier@~3.1.0 eslint-config-prettier@~6.10.0 eslint-config-prettier-standard@~3.0.0
 ```
 
 Add these scripts to "./package.json" file:
@@ -93,6 +103,8 @@ Add these scripts to "./package.json" file:
   "scripts": {
     "lint:json": "prettier --check \"./**/*.json\"",
     "format:json": "prettier --write \"./**/*.json\"",
+    "lint:yml": "prettier --check \"./**/*.yml\"",
+    "format:yml": "prettier --write \"./**/*.yml\"",
   },
 ```
 
@@ -101,10 +113,21 @@ Add these scripts to "./package.json" file:
 [Back to top ↑](#table-of-contents)
 
 ```bash
-npm install --save-dev eslint@~6.8.0 eslint-plugin-standard@~4.0.0 eslint-plugin-promise@~4.2.0 eslint-plugin-import@~2.20.0 eslint-plugin-node@~11.1.0 eslint-config-standard@~14.1.0 eslint-plugin-jest@~23.8.0 eslint-plugin-cypress@~2.10.0
+# Install ESLint
+npm i -D eslint@~6.8.0
+
+# Install ESLint default plugins
+npm i -D eslint-plugin-promise@~4.2.0 eslint-plugin-import@~2.20.0 eslint-plugin-node@~11.1.0
+
+# Install StandardJS, Jest & Cypress plugins
+npm i -D eslint-plugin-standard@~4.0.0 eslint-plugin-jest@~23.8.0 eslint-plugin-cypress@~2.10.0
+
+# Install StandardJS config
+npm i -D eslint-config-standard@~14.1.0
 ```
 
-Remove the "eslintConfig" key from "./package.json" file, then, create a new "./.eslintrc.json" file:
+Remove the "eslintConfig" key from "./package.json" file,
+then create a new "./.eslintrc.json" file:
 
 ```json
 {
@@ -127,7 +150,7 @@ Add these scripts to "./package.json" file:
 [Back to top ↑](#table-of-contents)
 
 ```bash
-npm install --save-dev stylelint@~13.0.0 stylelint-config-standard@~19.0.0 stylelint-config-prettier@~8.0.0
+npm i -D stylelint@~13.0.0 stylelint-config-standard@~19.0.0 stylelint-config-prettier@~8.0.0
 ```
 
 Create a new "./.stylelintrc.json":
@@ -143,7 +166,32 @@ Add these scripts to "./package.json" file:
 ```json
   "scripts": {
     "lint:css": "prettier --check \"./**/*.css\" && stylelint \"./**/*.css\"",
-    "format:css": "prettier --write \"./**/*.css\"",
+    "format:css": "prettier --write \"./**/*.css\""
+  },
+```
+
+### Install MarkdownLint
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+npm install --save-dev markdownlint@~0.19.0 markdownlint-cli@~0.22.0
+```
+
+Create a new "./.markdownlint.json" file:
+
+```json
+{
+  "default": true
+}
+```
+
+Add these scripts to "./package.json" file:
+
+```json
+  "scripts": {
+    "lint:md": "markdownlint \"./**/*.md\" --ignore ./node_modules",
+    "format:md": "markdownlint --fix \"./**/*.md\" --ignore ./node_modules",
     "lint": "npm-run-all lint:*",
     "format": "npm-run-all format:*"
   },
@@ -199,7 +247,9 @@ Add these lines juste after "browserslists" key in "./package.json" file:
   "lint-staged": {
     "./**/*.json": ["prettier --check"],
     "./**/*.js": ["eslint"],
-    "./**/*.css": ["prettier --check", "stylelint"]
+    "./**/*.css": ["prettier --check", "stylelint"],
+    "./**/*.yml": ["prettier --check"],
+    "./**/*.md": ["markdownlint --ignore ./node_modules"]
   },
   "husky": {
     "hooks": {
@@ -231,8 +281,8 @@ jobs:
         cache-name: cache-node-modules
       with:
         path: ./node_modules
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
-        restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-
+        key: ${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
+        restore-keys: ${{ env.cache-name }}-
     - name: Install dependencies
       run: npm install
     - name: "Check coding style and lint code"
@@ -258,8 +308,8 @@ jobs:
         cache-name: cache-node-modules
       with:
         path: ./node_modules
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
-        restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-
+        key: ${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
+        restore-keys: ${{ env.cache-name }}-
     - name: Install dependencies
       run: npm install
     - name: Launch test with Jest
@@ -304,6 +354,12 @@ npm run lint:css
 
 # Check JSON with Prettier
 npm run lint:json
+
+# Check YAML with Prettier
+npm run lint:yml
+
+# Check Mardkown with MarkdownLint
+npm run lint:md
 ```
 
 ### Format code automatically
@@ -322,6 +378,12 @@ npm run format:css
 
 # Format JSON with Prettier
 npm run format:json
+
+# Format YAML with Prettier
+npm run format:yml
+
+# Format Mardkown with MarkdownLint
+npm run format:md
 ```
 
 ### Audit & fix dependencies vulnerabilities
