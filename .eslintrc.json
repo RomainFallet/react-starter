@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "plugin:jest/all",
+    "plugin:cypress/recommended",
+    "standard",
+    "prettier-standard"
+  ],
+  "plugins": ["jest", "cypress"]
+}
