@@ -9,29 +9,43 @@
     "axios": "~0.19.2",
     "react": "~16.13.1",
     "react-dom": "~16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "~3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:all": "react-scripts test --watchAll=false",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open",
     "eject": "react-scripts eject",
-    "lint": "npm-run-all lint:*",
-    "lint:js": "eslint \"./**/*.js\"",
-    "lint:css": "prettier --check \"./**/*.css\" && stylelint \"./**/*.css\"",
     "lint:json": "prettier --check \"./**/*.json\"",
-    "lint:yml": "prettier --check \"./**/*.yml\"",
-    "format": "npm-run-all format:*",
-    "format:js": "eslint --fix \"./**/*.js\"",
-    "format:css": "prettier --write \"./**/*.css\"",
     "format:json": "prettier --write \"./**/*.json\"",
+    "lint:yml": "prettier --check \"./**/*.yml\"",
     "format:yml": "prettier --write \"./**/*.yml\"",
+    "lint:js": "eslint \"./**/*.js\"",
+    "format:js": "eslint --fix \"./**/*.js\"",
+    "lint:css": "prettier --check \"./**/*.css\" && stylelint \"./**/*.css\"",
+    "format:css": "prettier --write \"./**/*.css\"",
+    "lint:md": "markdownlint \"./**/*.md\" --ignore ./node_modules",
+    "format:md": "markdownlint --fix \"./**/*.md\" --ignore ./node_modules",
+    "lint": "npm-run-all lint:*",
+    "format": "npm-run-all format:*",
     "deps:check": "npm-check",
     "deps:upgrade": "npm-check -u"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "plugin:jest/all",
+      "plugin:cypress/recommended",
+      "react-app",
+      "standard",
+      "prettier-standard"
+    ],
+    "plugins": [
+      "jest",
+      "cypress"
+    ]
   },
   "browserslist": {
     "production": [
@@ -84,6 +98,12 @@
     "./**/*.css": [
       "prettier --check",
       "stylelint"
+    ],
+    "./**/*.yml": [
+      "prettier --check"
+    ],
+    "./**/*.md": [
+      "markdownlint --ignore ./node_modules"
     ]
   },
   "husky": {

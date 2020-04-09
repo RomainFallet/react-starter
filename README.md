@@ -18,14 +18,14 @@ On Windows, commands are meant to be executed on PowerShell.
   - [Install StyleLint code linter with Standard rules](#install-stylelint-code-linter-with-standard-rules)
   - [Install MarkdownLint](#install-markdownLint)
   - [Install npm-check dependencies checker](#install-dependencies-checker)
-  - [Install dotenv-flow](#install-dotenv)
-  - [Configure .gitignore](#configure-gitignore)
   - [Configure .editorconfig](#configure-editorconfig)
   - [Configure CI with Git hooks](#configure-ci-with-git-hooks)
   - [Configure CI with GitHub Actions](#configure-ci-with-github-actions)
+  - [Integrate formatters, linters & syntax to VSCode](#integrate-formatters-linters--syntax-to-vscode)
 - [Usage](#usage)
   - [Launch app](#launch-app)
-  - [Launch unit tests & functional tests](#launch-unit-tests--functional-tests)
+  - [Launch unit tests](#launch-unit-tests)
+  - [Launch functional tests](#launch-functional-tests)
   - [Check coding style & Lint code for errors/bad practices](#check-coding-style--lint-code-for-errorsbad-practices)
   - [Format code automatically](#format-code-automatically)
   - [Audit & fix dependencies vulnerabilities](#audit--fix-dependencies-vulnerabilities)
@@ -50,7 +50,7 @@ Define npm prefix:
 npm config set save-prefix='~'
 
 # Create app
-npx create-react-app react-starter --use-npm
+npm init react-app ./react-starter --use-npm
 
 # Install others packages
 npm install axios@~0.19.0
@@ -62,6 +62,8 @@ Replace caret (^) by tilde (~) in package.json versions, then re-install deps:
 ```bash
 npm install
 ```
+
+Create a new empty "./.env" file at the root of the project.
 
 ### Install Cypress & testing utilities
 
@@ -77,13 +79,23 @@ npm i -D cypress@~4.3.0 @testing-library/cypress@~6.0.0
 npm i -D axios-mock-adapter@~1.18.0  jest-axe@~3.4.0 identity-obj-proxy@~3.0.0
 ```
 
-Add this script in "./package.json" file:
+Add these scripts in "./package.json" file:
 
 ```json
   "scripts": {
-    "test:all": "react-scripts test --watchAll=false"
+    "test:all": "react-scripts test --watchAll=false",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open"
   },
 ```
+
+Create a new "./cypress.json" file:
+
+```json
+{}
+```
+
+Create new folders "./cypress/fixtures" and "./cypress/integration".
 
 ### Install Prettier code formatter
 
@@ -113,12 +125,6 @@ Add these scripts to "./package.json" file:
 [Back to top ↑](#table-of-contents)
 
 ```bash
-# Install ESLint
-npm i -D eslint@~6.8.0
-
-# Install ESLint default plugins
-npm i -D eslint-plugin-promise@~4.2.0 eslint-plugin-import@~2.20.0 eslint-plugin-node@~11.1.0
-
 # Install StandardJS, Jest & Cypress plugins
 npm i -D eslint-plugin-standard@~4.0.0 eslint-plugin-jest@~23.8.0 eslint-plugin-cypress@~2.10.0
 
@@ -126,13 +132,20 @@ npm i -D eslint-plugin-standard@~4.0.0 eslint-plugin-jest@~23.8.0 eslint-plugin-
 npm i -D eslint-config-standard@~14.1.0
 ```
 
-Remove the "eslintConfig" key from "./package.json" file,
-then create a new "./.eslintrc.json" file:
+Edit the "eslintConfig" key from "./package.json" file:
 
 ```json
 {
-  "extends": ["plugin:jest/all", "plugin:cypress/recommended", "standard", "prettier-standard"],
-  "plugins": ["jest", "cypress"]
+  "eslintConfig": {
+    "extends": [
+      "plugin:jest/all",
+      "plugin:cypress/recommended",
+      "react-app",
+      "standard",
+      "prettier-standard"
+    ],
+    "plugins": ["jest", "cypress"]
+  }
 }
 ```
 
@@ -166,7 +179,7 @@ Add these scripts to "./package.json" file:
 ```json
   "scripts": {
     "lint:css": "prettier --check \"./**/*.css\" && stylelint \"./**/*.css\"",
-    "format:css": "prettier --write \"./**/*.css\""
+    "format:css": "prettier --write \"./**/*.css\" && stylelint --fix \"./**/*.css\""
   },
 ```
 
@@ -274,19 +287,19 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Cache node modules
-      uses: actions/cache@v1
-      env:
-        cache-name: cache-node-modules
-      with:
-        path: ./node_modules
-        key: ${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
-        restore-keys: ${{ env.cache-name }}-
-    - name: Install dependencies
-      run: npm install
-    - name: "Check coding style and lint code"
-      run: npm run lint
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ./node_modules
+          key: ${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
+          restore-keys: ${{ env.cache-name }}-
+      - name: Install dependencies
+        run: npm install
+      - name: "Check coding style and lint code"
+        run: npm run lint
 ```
 
 Create a new "./.github/workflows/test.yml" file:
@@ -297,24 +310,98 @@ name: Launch unit tests & functional tests
 on: ['pull_request']
 
 jobs:
-  test:
+  unit-tests:
     runs-on: ubuntu-18.04
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Cache node modules
-      uses: actions/cache@v1
-      env:
-        cache-name: cache-node-modules
-      with:
-        path: ./node_modules
-        key: ${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
-        restore-keys: ${{ env.cache-name }}-
-    - name: Install dependencies
-      run: npm install
-    - name: Launch test with Jest
-      run: npm run test:all
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ./node_modules
+          key: ${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
+          restore-keys: ${{ env.cache-name }}-
+      - name: Install dependencies
+        run: npm install
+      - name: Launch test with Jest
+        run: npm run test:all
+  functional-tests:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ./node_modules
+          key: ${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
+          restore-keys: ${{ env.cache-name }}-
+      - name: Install dependencies
+        run: npm install
+      - name: Launch test with Cypress
+        run: npm run cy:run
 ```
+
+### Integrate formatters, linters & syntax to VSCode
+
+[Back to top ↑](#table-of-contents)
+
+Create a new "./.vscode/extensions.json" file:
+
+```json
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "stylelint.vscode-stylelint",
+    "davidanson.vscode-markdownlint",
+    "me-dutour-mathieu.vscode-github-actions",
+    "mikestead.dotenv",
+    "editorconfig.editorconfig",
+    "eg2.vscode-npm-script"
+  ]
+}
+```
+
+This will suggest to install
+[npm](https://marketplace.visualstudio.com/items?itemName=eg2.vscode-npm-script),
+[Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode),
+[ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint),
+[StyleLint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint),
+[MarkdownLint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint),
+[Github Actions](https://marketplace.visualstudio.com/items?itemName=me-dutour-mathieu.vscode-github-actions),
+[DotENV](https://marketplace.visualstudio.com/items?itemName=mikestead.dotenv)
+and [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+extensions to everybody opening this project in VSCode.
+
+Then, create a new "./.vscode/settings.json" file:
+
+```json
+{
+  "css.validate": false,
+  "eslint.enable": true,
+  "stylelint.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.markdownlint": true,
+    "source.fixAll.stylelint": true
+  },
+  "editor.formatOnSave": true,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.disableLanguages": ["javascript", "javascriptreact", "markdown"]
+}
+```
+
+This will format automatically the code on save.
 
 ## Usage
 
@@ -326,7 +413,7 @@ jobs:
 npm start
 ```
 
-### Launch unit tests & functional tests
+### Launch unit tests
 
 [Back to top ↑](#table-of-contents)
 
@@ -336,6 +423,18 @@ npm test
 
 # Run all test suite
 npm test:all
+```
+
+### Launch functional tests
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+# Run in terminal
+npm run cy:run
+
+# Run in browser
+npm run cy:open
 ```
 
 ### Check coding style & Lint code for errors/bad practices
@@ -373,7 +472,7 @@ npm run format
 # Format JavaScript with ESLint (Prettier + StandardJS)
 npm run format:js
 
-# Format CSS with Prettier
+# Format CSS with Prettier + StyleLint (Standard)
 npm run format:css
 
 # Format JSON with Prettier

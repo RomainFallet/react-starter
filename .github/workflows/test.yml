@@ -3,20 +3,37 @@ name: Launch unit tests & functional tests
 on: ['pull_request']
 
 jobs:
-  test:
+  unit-tests:
     runs-on: ubuntu-18.04
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Cache node modules
-      uses: actions/cache@v1
-      env:
-        cache-name: cache-node-modules
-      with:
-        path: ./node_modules
-        key: ${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
-        restore-keys: ${{ env.cache-name }}-
-    - name: Install dependencies
-      run: npm install
-    - name: Launch test with Jest
-      run: npm run test:all
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ./node_modules
+          key: ${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
+          restore-keys: ${{ env.cache-name }}-
+      - name: Install dependencies
+        run: npm install
+      - name: Launch test with Jest
+        run: npm run test:all
+  functional-tests:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ./node_modules
+          key: ${{ env.cache-name }}-${{ hashFiles('./package-lock.json') }}
+          restore-keys: ${{ env.cache-name }}-
+      - name: Install dependencies
+        run: npm install
+      - name: Launch test with Cypress
+        run: npm run cy:run
