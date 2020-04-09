@@ -1,6 +1,6 @@
 name: Launch unit tests & functional tests
 
-on: ['pull_request']
+on: ["pull_request"]
 
 jobs:
   unit-tests:

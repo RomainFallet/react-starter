@@ -2,16 +2,15 @@
 
 The purpose of this repository is to provide instructions to create
 and configure a new [React](https://reactjs.org/) app from scratch
-with appropriate linters, editor config, testing utilities,
-continuous integration on Ubuntu, macOS and Windows.
-
-On Windows, commands are meant to be executed on PowerShell.
+with appropriate linters, editor config, testing utilities and
+continuous integration.
 
 ## Table of contents
 
 - [Quickstart](#quickstart)
 - [Manual configuration](#manual-configuration)
   - [Init the project](#init-the-project)
+  - [Create default app](#create-default-app)
   - [Install Cypress & testing utilities](#install-cypress--testing-utilities)
   - [Install Prettier code formatter](#install-prettier-code-formatter)
   - [Install ESLint code linter with StandardJS rules](#install-eslint-code-linter-with-standardjs-rules)
@@ -50,10 +49,10 @@ Define npm prefix:
 npm config set save-prefix='~'
 
 # Create app
-npm init react-app ./react-starter --use-npm
+npm init react-app@~3.4.0 --use-npm ./react-starter
 
 # Install others packages
-npm install axios@~0.19.0
+npm install react-router-dom@~5.1.0 axios@~0.19.0
 npm install --save-dev npm-run-all@~4.1.5
 ```
 
@@ -64,6 +63,200 @@ npm install
 ```
 
 Create a new empty "./.env" file at the root of the project.
+
+### Create default app
+
+[Back to top ↑](#table-of-contents)
+
+First, remove "./src/App.js", "./src/App.test.js",
+"./src/App.css" and "./src/logo.svg" files.
+
+Then, edit the "./src/index.js" file like this:
+
+```javascript
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import ReactDOM from 'react-dom'
+import './index.css'
+import CatsList from './containers/CatsList/CatsList'
+import * as serviceWorker from './serviceWorker'
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Router>
+      <Switch>
+        <Route path="/">
+          <CatsList />
+        </Route>
+      </Switch>
+    </Router>
+  </React.StrictMode>,
+  document.getElementById('root')
+)
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister()
+```
+
+Edit the "./src/index.css" file like this:
+
+```css
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+}
+```
+
+Create a new "./src/containers/CatsList/CatsList.js" file:
+
+```javascript
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import styles from './CatsList.module.css'
+
+const CatsList = () => {
+  const [cats, setCats] = useState([])
+
+  useEffect(() => {
+    fetchCats()
+  }, [])
+
+  const fetchCats = async () => {
+    const response = await axios.get(
+      'https://api.thecatapi.com/v1/images/search?limit=5'
+    )
+    setCats(response.data)
+  }
+
+  return (
+    <React.Fragment>
+      <h1>Cats list</h1>
+      <button type="button" onClick={fetchCats}>
+        I want new cats!
+      </button>
+      <ul>
+        {cats.map(cat => (
+          <li key={cat.id}>
+            <img
+              className={styles.Cat}
+              width="300"
+              height="200"
+              src={cat.url}
+              alt="Cat"
+            />
+          </li>
+        ))}
+      </ul>
+    </React.Fragment>
+  )
+}
+
+export default CatsList
+```
+
+Create a new "./src/containers/CatsList/CatsList.test.js" file:
+
+```javascript
+import React from 'react'
+import { render, wait, fireEvent } from '@testing-library/react'
+import { axe, toHaveNoViolations } from 'jest-axe'
+import CatsList from './CatsList'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
+
+const axiosMock = new MockAdapter(axios)
+expect.extend(toHaveNoViolations)
+
+describe('<CatsList />', () => {
+  beforeEach(() => {
+    axiosMock.reset()
+    jest.clearAllMocks()
+  })
+
+  it('should display cats when component is loaded', async () => {
+    // Arrange
+    expect.assertions(4)
+    axiosMock.onGet().reply(200, [
+      { id: 1, url: 'https://example.com' },
+      { id: 2, url: 'https://example.com' }
+    ])
+    jest.spyOn(axios, 'get')
+
+    // Act
+    const { findAllByAltText, container } = render(<CatsList />)
+    const cats = await findAllByAltText('Cat')
+
+    // Assert
+    expect(await axe(container)).toHaveNoViolations()
+    expect(axios.get).toHaveBeenCalledTimes(1)
+    expect(axios.get).toHaveBeenCalledWith(
+      'https://api.thecatapi.com/v1/images/search?limit=5'
+    )
+    expect(cats).toHaveLength(2)
+  })
+
+  it('should be able to display new cats manually', async () => {
+    // Arrange
+    expect.assertions(3)
+    axiosMock.onGet().reply(200, [
+      { id: 1, url: 'https://example.com' },
+      { id: 2, url: 'https://example.com' }
+    ])
+    jest.spyOn(axios, 'get')
+    const { findAllByAltText, getByText } = render(<CatsList />)
+    await wait()
+    const button = getByText('I want new cats!')
+
+    // Act
+    fireEvent.click(button)
+    const cats = await findAllByAltText('Cat')
+
+    // Assert
+    expect(axios.get).toHaveBeenCalledTimes(2)
+    expect(axios.get).toHaveBeenLastCalledWith(
+      'https://api.thecatapi.com/v1/images/search?limit=5'
+    )
+    expect(cats).toHaveLength(2)
+  })
+})
+```
+
+Create a new "./src/containers/CatsList/CatsList.module.css" file:
+
+```css
+.Cat {
+  object-fit: cover;
+}
+```
+
+Create a new "./cypress/integration/CatsList.spec.js" file:
+
+```javascript
+describe('feature CatsList', () => {
+  it('displays all the cats', () => {
+    // Act
+    cy.visit('/')
+
+    // Assert
+    cy.findAllByAltText('Cat').should('have.length', 5)
+  })
+
+  it('displays new cats after hitting reload button', () => {
+    // Arrange
+    cy.visit('/')
+
+    // Act
+    cy.findByText('I want new cats!').click()
+
+    // Assert
+    cy.findAllByAltText('Cat').should('have.length', 5)
+  })
+})
+```
 
 ### Install Cypress & testing utilities
 
@@ -76,7 +269,7 @@ Install packages:
 npm i -D cypress@~4.3.0 @testing-library/cypress@~6.0.0
 
 # Install other tools
-npm i -D axios-mock-adapter@~1.18.0  jest-axe@~3.4.0 identity-obj-proxy@~3.0.0
+npm i -D axios-mock-adapter@~1.18.0 jest-axe@~3.4.0 identity-obj-proxy@~3.0.0
 ```
 
 Add these scripts in "./package.json" file:
@@ -92,10 +285,26 @@ Add these scripts in "./package.json" file:
 Create a new "./cypress.json" file:
 
 ```json
-{}
+{
+  "baseUrl": "http://localhost:3000"
+}
 ```
 
-Create new folders "./cypress/fixtures" and "./cypress/integration".
+Generate cypress files:
+
+```bash
+# Start the app
+npm start
+
+# Start Cypress
+npm run cy:run
+```
+
+Add this line to "./cypress/support/commands.js" file:
+
+```javascript
+import '@testing-library/cypress/add-commands'
+```
 
 ### Install Prettier code formatter
 
@@ -125,6 +334,9 @@ Add these scripts to "./package.json" file:
 [Back to top ↑](#table-of-contents)
 
 ```bash
+# Install ESLint default plugins
+npm i -D eslint-plugin-promise@~4.2.0 eslint-plugin-import@~2.20.0 eslint-plugin-node@~11.1.0
+
 # Install StandardJS, Jest & Cypress plugins
 npm i -D eslint-plugin-standard@~4.0.0 eslint-plugin-jest@~23.8.0 eslint-plugin-cypress@~2.10.0
 
@@ -138,13 +350,31 @@ Edit the "eslintConfig" key from "./package.json" file:
 {
   "eslintConfig": {
     "extends": [
-      "plugin:jest/all",
-      "plugin:cypress/recommended",
       "react-app",
       "standard",
       "prettier-standard"
     ],
-    "plugins": ["jest", "cypress"]
+    "overrides": [
+      {
+        "files": [
+          "./src/**/*.test.js"
+        ],
+        "extends": "plugin:jest/all",
+        "rules": {
+          "jest/no-hooks": 0
+        }
+      },
+      {
+        "files": [
+          "./cypress/**/*.spec.js"
+        ],
+        "extends": "plugin:cypress/recommended"
+      }
+    ],
+    "plugins": ["jest", "cypress"],
+    "ignorePatterns": [
+      "node_modules"
+    ]
   }
 }
 ```
@@ -156,6 +386,12 @@ Add these scripts to "./package.json" file:
     "lint:js": "eslint \"./**/*.js\"",
     "format:js": "eslint --fix \"./**/*.js\"",
   },
+```
+
+Format existing files:
+
+```bash
+npm run format:js
 ```
 
 ### Install StyleLint code linter with Standard rules
@@ -258,17 +494,28 @@ Add these lines juste after "browserslists" key in "./package.json" file:
 
 ```json
   "lint-staged": {
-    "./**/*.json": ["prettier --check"],
-    "./**/*.js": ["eslint"],
-    "./**/*.css": ["prettier --check", "stylelint"],
-    "./**/*.yml": ["prettier --check"],
-    "./**/*.md": ["markdownlint --ignore ./node_modules"]
+    "./**/*.json": [
+      "prettier --check"
+    ],
+    "./**/*.js": [
+      "eslint"
+    ],
+    "./**/*.css": [
+      "prettier --check",
+      "stylelint"
+    ],
+    "./**/*.yml": [
+      "prettier --check"
+    ],
+    "./**/*.md": [
+      "markdownlint --ignore ./node_modules"
+    ]
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  }
+  },
 ```
 
 ### Configure CI with GitHub Actions
@@ -280,7 +527,7 @@ Create a new "./.github/workflows/lint.yml" file:
 ```yaml
 name: Check coding style and lint code
 
-on: ['push', 'pull_request']
+on: ["push", "pull_request"]
 
 jobs:
   lint:
@@ -307,7 +554,7 @@ Create a new "./.github/workflows/test.yml" file:
 ```yaml
 name: Launch unit tests & functional tests
 
-on: ['pull_request']
+on: ["pull_request"]
 
 jobs:
   unit-tests:
@@ -391,12 +638,7 @@ Then, create a new "./.vscode/settings.json" file:
     "source.fixAll.stylelint": true
   },
   "editor.formatOnSave": true,
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[yaml]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.disableLanguages": ["javascript", "javascriptreact", "markdown"]
 }
 ```
@@ -422,7 +664,7 @@ npm start
 npm test
 
 # Run all test suite
-npm test:all
+npm run test:all
 ```
 
 ### Launch functional tests

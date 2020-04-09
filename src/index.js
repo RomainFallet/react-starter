@@ -1,12 +1,19 @@
 import React from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import './index.css'
-import App from './App'
+import CatsList from './containers/CatsList/CatsList'
 import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <Switch>
+        <Route path="/">
+          <CatsList />
+        </Route>
+      </Switch>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 )
