@@ -276,7 +276,7 @@ Add these scripts in "./package.json" file:
 
 ```json
   "scripts": {
-    "test:all": "react-scripts test --watchAll=false",
+    "test:all": "react-scripts test --watchAll=false --passWithNoTests",
     "cy:run": "cypress run",
     "cy:open": "cypress open"
   },
