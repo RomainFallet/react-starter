@@ -40,7 +40,11 @@ continuous integration.
 ## Quickstart
 
 ```bash
+# Clone repo
 git clone https://github.com/RomainFallet/react-starter
+
+# Go inside the project
+cd ./react-starter
 ```
 
 ## Manual configuration
