@@ -16,7 +16,7 @@ continuous integration.
   - [Install Prettier code formatter](#install-prettier-code-formatter)
   - [Install ESLint code linter with StandardJS rules](#install-eslint-code-linter-with-standardjs-rules)
   - [Install StyleLint code linter with Standard rules](#install-stylelint-code-linter-with-standard-rules)
-  - [Install MarkdownLint](#install-markdownLint)
+  - [Install MarkdownLint code linter](#install-markdownLint-code-linter)
   - [Install npm-check dependencies checker](#install-dependencies-checker)
   - [Configure .editorconfig](#configure-editorconfig)
   - [Configure CI with Git hooks](#configure-ci-with-git-hooks)
@@ -60,7 +60,10 @@ Define npm prefix:
 npm config set save-prefix='~'
 
 # Create app
-npm init react-app@~3.4.0 --use-npm ./react-starter
+npm init react-app@~3.4.0 --use-npm ./<my_project_name>
+
+# Go inside the project
+cd ./<my_project_name>
 
 # Install others packages
 npm install react-router-dom@~5.1.0 axios@~0.19.0
@@ -430,7 +433,7 @@ Add these scripts to "./package.json" file:
   },
 ```
 
-### Install MarkdownLint
+### Install MarkdownLint code linter
 
 [Back to top ↑](#table-of-contents)
 
