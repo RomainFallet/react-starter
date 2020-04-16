@@ -45,10 +45,7 @@
         "files": [
           "./src/**/*.test.js"
         ],
-        "extends": "plugin:jest/all",
-        "rules": {
-          "jest/no-hooks": 0
-        }
+        "extends": "plugin:jest/all"
       },
       {
         "files": [

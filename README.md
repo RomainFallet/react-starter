@@ -186,18 +186,15 @@ const axiosMock = new MockAdapter(axios)
 expect.extend(toHaveNoViolations)
 
 describe('<CatsList />', () => {
-  beforeEach(() => {
-    axiosMock.reset()
-    jest.clearAllMocks()
-  })
-
   it('should display cats when component is loaded', async () => {
     // Arrange
     expect.assertions(4)
+    axiosMock.reset()
     axiosMock.onGet().reply(200, [
       { id: 1, url: 'https://example.com' },
       { id: 2, url: 'https://example.com' }
     ])
+    jest.clearAllMocks()
     jest.spyOn(axios, 'get')
 
     // Act
@@ -216,10 +213,12 @@ describe('<CatsList />', () => {
   it('should be able to display new cats manually', async () => {
     // Arrange
     expect.assertions(3)
+    axiosMock.reset()
     axiosMock.onGet().reply(200, [
       { id: 1, url: 'https://example.com' },
       { id: 2, url: 'https://example.com' }
     ])
+    jest.clearAllMocks()
     jest.spyOn(axios, 'get')
     const { findAllByAltText, getByText } = render(<CatsList />)
     await wait()
@@ -372,10 +371,7 @@ Edit the "eslintConfig" key from "./package.json" file:
         "files": [
           "./src/**/*.test.js"
         ],
-        "extends": "plugin:jest/all",
-        "rules": {
-          "jest/no-hooks": 0
-        }
+        "extends": "plugin:jest/all"
       },
       {
         "files": [
