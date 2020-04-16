@@ -290,7 +290,6 @@ Add these scripts in "./package.json" file:
 
 ```json
   "scripts": {
-    "test:all": "react-scripts test --watchAll=false --passWithNoTests",
     "cy:run": "cypress run",
     "cy:open": "cypress open"
   },
@@ -587,7 +586,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Launch test with Jest
-        run: npm run test:all
+        run: npm test
   functional-tests:
     runs-on: ubuntu-18.04
 
