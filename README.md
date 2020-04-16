@@ -70,7 +70,8 @@ npm install react-router-dom@~5.1.0 axios@~0.19.0
 npm install --save-dev npm-run-all@~4.1.5
 ```
 
-Replace caret (^) by tilde (~) in package.json versions, then re-install deps:
+Replace caret (^) by tilde (~) in package.json versions,
+then remove "./package-lock.json" and "./node_modules" and re-install deps:
 
 ```bash
 npm install
