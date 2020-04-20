@@ -53,7 +53,7 @@ cd ./react-starter
 
 [Back to top ↑](#table-of-contents)
 
-Create a new "./.npmrc" file:
+Create a new  `./.npmrc` file:
 
 ```text
 save-prefix='~'
@@ -74,22 +74,22 @@ npm install --save-dev npm-run-all@~4.1.5
 ```
 
 Replace caret (^) by tilde (~) in package.json versions,
-then remove "./package-lock.json" and "./node_modules" and re-install deps:
+then remove  `./package-lock.json` and  `./node_modules` and re-install deps:
 
 ```bash
 npm install
 ```
 
-Create a new empty "./.env" file at the root of the project.
+Create a new empty  `./.env` file at the root of the project.
 
 ### Create default app
 
 [Back to top ↑](#table-of-contents)
 
-First, remove "./src/App.js", "./src/App.test.js",
-"./src/App.css" and "./src/logo.svg" files.
+First, remove  `./src/App.js`,  `./src/App.test.js`,
+ `./src/App.css` and  `./src/logo.svg` files.
 
-Then, edit the "./src/index.js" file like this:
+Then, edit the  `./src/index.js` file like this:
 
 ```javascript
 import React from 'react'
@@ -118,7 +118,7 @@ ReactDOM.render(
 serviceWorker.unregister()
 ```
 
-Edit the "./src/index.css" file like this:
+Edit the  `./src/index.css` file like this:
 
 ```css
 body {
@@ -129,7 +129,7 @@ body {
 }
 ```
 
-Create a new "./src/containers/CatsList/CatsList.js" file:
+Create a new  `./src/containers/CatsList/CatsList.js` file:
 
 ```javascript
 import React, { useEffect, useState } from 'react'
@@ -176,7 +176,7 @@ const CatsList = () => {
 export default CatsList
 ```
 
-Create a new "./src/containers/CatsList/CatsList.test.js" file:
+Create a new  `./src/containers/CatsList/CatsList.test.js` file:
 
 ```javascript
 import React from 'react'
@@ -242,7 +242,7 @@ describe('<CatsList />', () => {
 })
 ```
 
-Create a new "./src/containers/CatsList/CatsList.module.css" file:
+Create a new  `./src/containers/CatsList/CatsList.module.css` file:
 
 ```css
 .Cat {
@@ -250,7 +250,7 @@ Create a new "./src/containers/CatsList/CatsList.module.css" file:
 }
 ```
 
-Create a new "./cypress/integration/CatsList.spec.js" file:
+Create a new  `./cypress/integration/CatsList.spec.js` file:
 
 ```javascript
 describe('feature CatsList', () => {
@@ -289,7 +289,7 @@ npm i -D cypress@~4.3.0 @testing-library/cypress@~6.0.0
 npm i -D axios-mock-adapter@~1.18.0 jest-axe@~3.4.0 identity-obj-proxy@~3.0.0
 ```
 
-Add these scripts in "./package.json" file:
+Add these scripts in  `./package.json` file:
 
 ```json
   "scripts": {
@@ -298,7 +298,7 @@ Add these scripts in "./package.json" file:
   },
 ```
 
-Create a new "./cypress.json" file:
+Create a new  `./cypress.json` file:
 
 ```json
 {
@@ -316,7 +316,7 @@ npm start
 npm run cy:run
 ```
 
-Add this line to "./cypress/support/commands.js" file:
+Add this line to  `./cypress/support/commands.js` file:
 
 ```javascript
 import '@testing-library/cypress/add-commands'
@@ -334,7 +334,7 @@ npm i -D prettier@~2.0.0 prettier-config-standard@~1.0.0
 npm i -D eslint-plugin-prettier@~3.1.0 eslint-config-prettier@~6.10.0 eslint-config-prettier-standard@~3.0.0
 ```
 
-Add these scripts to "./package.json" file:
+Add these scripts to  `./package.json` file:
 
 ```json
   "scripts": {
@@ -360,7 +360,7 @@ npm i -D eslint-plugin-standard@~4.0.0 eslint-plugin-jest@~23.8.0 eslint-plugin-
 npm i -D eslint-config-standard@~14.1.0
 ```
 
-Edit the "eslintConfig" key from "./package.json" file:
+Edit the "eslintConfig" key from  `./package.json` file:
 
 ```json
 {
@@ -392,7 +392,7 @@ Edit the "eslintConfig" key from "./package.json" file:
 }
 ```
 
-Add these scripts to "./package.json" file:
+Add these scripts to  `./package.json` file:
 
 ```json
   "scripts": {
@@ -415,7 +415,7 @@ npm run format:js
 npm i -D stylelint@~13.0.0 stylelint-config-standard@~19.0.0 stylelint-config-prettier@~8.0.0
 ```
 
-Create a new "./.stylelintrc.json":
+Create a new  `./.stylelintrc.json`:
 
 ```bash
 {
@@ -423,7 +423,7 @@ Create a new "./.stylelintrc.json":
 }
 ```
 
-Add these scripts to "./package.json" file:
+Add these scripts to  `./package.json` file:
 
 ```json
   "scripts": {
@@ -440,7 +440,7 @@ Add these scripts to "./package.json" file:
 npm install --save-dev markdownlint@~0.19.0 markdownlint-cli@~0.22.0
 ```
 
-Create a new "./.markdownlint.json" file:
+Create a new  `./.markdownlint.json` file:
 
 ```json
 {
@@ -448,7 +448,7 @@ Create a new "./.markdownlint.json" file:
 }
 ```
 
-Add these scripts to "./package.json" file:
+Add these scripts to  `./package.json` file:
 
 ```json
   "scripts": {
@@ -467,7 +467,7 @@ Add these scripts to "./package.json" file:
 npm install --save-dev npm-check@~5.9.0
 ```
 
-Add these scripts to "./package.json" file:
+Add these scripts to  `./package.json` file:
 
 ```json
   "scripts": {
@@ -480,7 +480,7 @@ Add these scripts to "./package.json" file:
 
 [Back to top ↑](#table-of-contents)
 
-Create a new "./.editorconfig " file:
+Create a new  `./.editorconfig` file:
 
 ```bash
 # EditorConfig is awesome: https://EditorConfig.org
@@ -503,7 +503,7 @@ trim_trailing_whitespace = true
 npm install --save-dev husky@~4.2.0 lint-staged@~10.1.0
 ```
 
-Add these lines juste after "browserslists" key in "./package.json" file:
+Add these lines juste after "browserslists" key in  `./package.json` file:
 
 ```json
   "lint-staged": {
@@ -535,7 +535,7 @@ Add these lines juste after "browserslists" key in "./package.json" file:
 
 [Back to top ↑](#table-of-contents)
 
-Create a new "./.github/workflows/lint.yml" file:
+Create a new  `./.github/workflows/lint.yml` file:
 
 ```yaml
 name: Check coding style and lint code
@@ -562,7 +562,7 @@ jobs:
         run: npm run lint
 ```
 
-Create a new "./.github/workflows/test.yml" file:
+Create a new  `./.github/workflows/test.yml` file:
 
 ```yaml
 name: Launch unit tests & functional tests
@@ -610,7 +610,7 @@ jobs:
 
 [Back to top ↑](#table-of-contents)
 
-Create a new "./.vscode/extensions.json" file:
+Create a new  `./.vscode/extensions.json` file:
 
 ```json
 {
@@ -638,7 +638,7 @@ This will suggest to install
 and [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
 extensions to everybody opening this project in VSCode.
 
-Then, create a new "./.vscode/settings.json" file:
+Then, create a new  `./.vscode/settings.json` file:
 
 ```json
 {
