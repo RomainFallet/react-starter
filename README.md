@@ -53,12 +53,15 @@ cd ./react-starter
 
 [Back to top ↑](#table-of-contents)
 
-Define npm prefix:
+Create a new "./.npmrc" file:
+
+```text
+save-prefix='~'
+```
+
+Set up the project:
 
 ```bash
-# Set NPM prefix
-npm config set save-prefix='~'
-
 # Create app
 npm init react-app@~3.4.0 --use-npm ./<my_project_name>
 
