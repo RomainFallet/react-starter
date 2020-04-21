@@ -353,42 +353,42 @@ Add these scripts to  `./package.json` file:
 # Install ESLint default plugins
 npm i -D eslint-plugin-promise@~4.2.0 eslint-plugin-import@~2.20.0 eslint-plugin-node@~11.1.0
 
-# Install StandardJS, Jest & Cypress plugins
-npm i -D eslint-plugin-standard@~4.0.0 eslint-plugin-jest@~23.8.0 eslint-plugin-cypress@~2.10.0
+# Install StandardJS config & plugin
+npm i -D eslint-plugin-standard@~4.0.0 npm i -D eslint-config-standard@~14.1.0
 
-# Install StandardJS config
-npm i -D eslint-config-standard@~14.1.0
+# Install Jest & Cypress plugins
+npm i -D eslint-plugin-jest@~23.8.0 eslint-plugin-jest-dom@~2.0.1 eslint-plugin-cypress@~2.10.0
 ```
 
-Edit the "eslintConfig" key from  `./package.json` file:
+Remove the "eslintConfig" key from  `./package.json` file.
+
+Then, create a new `./.eslintrc.json`file:
 
 ```json
 {
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "standard",
-      "prettier-standard"
-    ],
-    "overrides": [
-      {
-        "files": [
-          "./src/**/*.test.js"
-        ],
-        "extends": "plugin:jest/all"
-      },
-      {
-        "files": [
-          "./cypress/**/*.spec.js"
-        ],
-        "extends": "plugin:cypress/recommended"
-      }
-    ],
-    "plugins": ["jest", "cypress"],
-    "ignorePatterns": [
-      "node_modules"
-    ]
-  }
+  "extends": [
+    "react-app",
+    "plugin:jsx-a11y/recommended",
+    "standard",
+    "prettier-standard"
+  ],
+  "overrides": [
+    {
+      "files": ["./src/**/*.test.js"],
+      "extends": [
+        "plugin:jest/all",
+        "plugin:jest-dom/recommended",
+        "standard",
+        "prettier-standard"
+      ]
+    },
+    {
+      "files": ["./cypress/**/*.spec.js"],
+      "extends": ["plugin:cypress/recommended", "standard", "prettier-standard"]
+    }
+  ],
+  "plugins": ["jsx-a11y", "jest", "jest-dom", "cypress"],
+  "ignorePatterns": ["node_modules"]
 }
 ```
 

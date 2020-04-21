@@ -34,34 +34,6 @@
     "deps:check": "npm-check",
     "deps:upgrade": "npm-check -u"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "standard",
-      "prettier-standard"
-    ],
-    "overrides": [
-      {
-        "files": [
-          "./src/**/*.test.js"
-        ],
-        "extends": "plugin:jest/all"
-      },
-      {
-        "files": [
-          "./cypress/**/*.spec.js"
-        ],
-        "extends": "plugin:cypress/recommended"
-      }
-    ],
-    "plugins": [
-      "jest",
-      "cypress"
-    ],
-    "ignorePatterns": [
-      "node_modules"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -107,6 +79,7 @@
     "eslint-plugin-cypress": "~2.10.3",
     "eslint-plugin-import": "~2.20.2",
     "eslint-plugin-jest": "~23.8.2",
+    "eslint-plugin-jest-dom": "~2.0.1",
     "eslint-plugin-node": "~11.1.0",
     "eslint-plugin-prettier": "~3.1.2",
     "eslint-plugin-promise": "~4.2.1",
